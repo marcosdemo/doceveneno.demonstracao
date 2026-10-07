@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doce Veneno Doceria | Tradição e Qualidade</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts: Poppins for headings, Inter for body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind Configuration and Custom CSS -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#fef2f2',
+                            100: '#fee2e2',
+                            500: '#ef4444',
+                            600: '#dc2626', // Main red
+                            700: '#b91c1c',
+                            900: '#7f1d1d',
+                        }
+                    },
+                    animation: {
+                        'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Intersection Observer Animation Classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+
+        /* Glassmorphism utility */
+        .glass {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Gradient Text */
+        .text-gradient {
+            background: linear-gradient(135deg, #dc2626, #7f1d1d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Modern Button Shadow */
+        .btn-shadow {
+            box-shadow: 0 10px 25px -5px rgba(220, 38, 38, 0.4), 0 8px 10px -6px rgba(220, 38, 38, 0.1);
+        }
+    </style>
+</head>
+<body class="font-sans bg-gray-50 text-gray-800 antialiased overflow-x-hidden">
+
+    <!-- Fixed Header -->
+    <header class="fixed w-full top-0 z-50 glass transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <i class="fa-solid fa-cake-candles text-brand-600 text-3xl mr-3"></i>
+                    <span class="font-heading font-bold text-2xl tracking-tight text-gray-900">Doce <span class="text-brand-600">Veneno</span></span>
+                </div>
+
+                <!-- Desktop Nav -->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#inicio" class="text-gray-600 hover:text-brand-600 font-medium transition-colors">Início</a>
+                    <a href="#cardapio" class="text-gray-600 hover:text-brand-600 font-medium transition-colors">Mais Pedidos</a>
+                    <a href="#loja" class="text-gray-600 hover:text-brand-600 font-medium transition-colors">Nossa Loja</a>
+                </nav>
+
+                <!-- Header CTA -->
+                <div class="hidden md:flex items-center">
+                    <a href="https://wa.me/5515996340103" target="_blank" class="bg-green-500 hover:bg-green-600 text-white px-6 py-2.5 rounded-full font-medium transition-all transform hover:scale-105 shadow-md flex items-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                        Contato
+                    </a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-600 hover:text-brand-600 focus:outline-none p-2">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 absolute w-full shadow-lg">
+            <div class="px-4 pt-2 pb-6 space-y-2 text-center">
+                <a href="#inicio" class="block px-3 py-3 text-gray-800 font-medium hover:bg-brand-50 hover:text-brand-600 rounded-lg">Início</a>
+                <a href="#cardapio" class="block px-3 py-3 text-gray-800 font-medium hover:bg-brand-50 hover:text-brand-600 rounded-lg">Mais Pedidos</a>
+                <a href="#loja" class="block px-3 py-3 text-gray-800 font-medium hover:bg-brand-50 hover:text-brand-600 rounded-lg">Nossa Loja</a>
+                <a href="https://wa.me/5515996340103" class="block px-3 py-3 mt-4 text-white bg-green-500 rounded-lg font-medium">
+                    <i class="fa-brands fa-whatsapp mr-2"></i> WhatsApp
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden relative">
+        <!-- Background decoration -->
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-brand-50 opacity-70 blur-3xl -z-10"></div>
+        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-red-100 opacity-50 blur-3xl -z-10"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="flex flex-col lg:flex-row items-center gap-12">
+                <!-- Text Content -->
+                <div class="w-full lg:w-1/2 text-center lg:text-left reveal">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-50 text-brand-600 font-medium text-sm mb-6 border border-brand-100">
+                        <i class="fa-solid fa-star text-yellow-400"></i>
+                        <span>Desde 1994 adoçando sua vida!</span>
+                    </div>
+                    <h1 class="font-heading text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6 text-gray-900">
+                        Tradição e <br/>
+                        <span class="text-gradient">Qualidade</span>
+                    </h1>
+                    <p class="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl mx-auto lg:mx-0">
+                        Descubra o sabor inesquecível das nossas receitas originais. Bolos, doces e sobremesas feitas com os melhores ingredientes.
+                    </p>
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                        <a href="https://wa.me/5515996340103" class="w-full sm:w-auto bg-brand-600 hover:bg-brand-700 text-white px-8 py-4 rounded-full font-bold text-lg transition-all transform hover:-translate-y-1 btn-shadow animate-pulse-fast text-center">
+                            Faça sua Encomenda
+                        </a>
+                        <a href="#cardapio" class="w-full sm:w-auto bg-white border-2 border-gray-200 hover:border-brand-600 hover:text-brand-600 text-gray-700 px-8 py-4 rounded-full font-bold text-lg transition-all text-center">
+                            Ver Cardápio
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Hero Image -->
+                <div class="w-full lg:w-1/2 relative reveal reveal-delay-2">
+                    <div class="relative w-full max-w-lg mx-auto">
+                        <!-- Main Image -->
+                        <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&q=80&w=800&h=800" alt="Bolo Delicioso" class="rounded-[2rem] shadow-2xl relative z-10 w-full object-cover aspect-square border-8 border-white animate-float">
+                        
+                        <!-- Floating badges -->
+                        <div class="absolute -bottom-6 -left-6 bg-white p-4 rounded-2xl shadow-xl z-20 flex items-center gap-3">
+                            <div class="bg-green-100 p-3 rounded-full text-green-600">
+                                <i class="fa-solid fa-leaf text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500 uppercase font-bold">Ingredientes</p>
+                                <p class="text-sm font-bold text-gray-900">100% Frescos</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Os Mais Pedidos Section -->
+    <section id="cardapio" class="py-24 bg-white relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+                <h2 class="text-brand-600 font-bold uppercase tracking-wider text-sm mb-2">Nosso Cardápio</h2>
+                <h3 class="font-heading text-4xl md:text-5xl font-bold text-gray-900">Os Mais Pedidos</h3>
+                <div class="w-24 h-1 bg-brand-600 mx-auto mt-6 rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                
+                <!-- Product 1 -->
+                <div class="group bg-gray-50 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-gray-100 reveal reveal-delay-1">
+                    <div class="relative h-60 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&q=80&w=400&h=300" alt="Bolo Abacaxi com Creme" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur text-brand-600 font-bold px-3 py-1 rounded-full text-sm shadow">
+                            Top 1
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="font-heading text-xl font-bold text-gray-900 mb-2 group-hover:text-brand-600 transition-colors">Abacaxi com Creme</h4>
+                        <p class="text-gray-500 text-sm mb-4 line-clamp-2">Massa branca fofinha, recheio generoso de creme com pedaços de abacaxi fresco.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-2xl font-black text-gray-900">R$ 110<span class="text-sm font-medium text-gray-500">,00 /kg</span></span>
+                        </div>
+                        <a href="https://wa.me/5515996340103?text=Olá, gostaria de encomendar o bolo de Abacaxi com Creme." class="mt-4 block w-full text-center bg-brand-50 hover:bg-brand-600 text-brand-600 hover:text-white py-3 rounded-xl font-semibold transition-colors">
+                            Pedir Agora
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="group bg-gray-50 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-gray-100 reveal reveal-delay-2">
+                    <div class="relative h-60 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1616541823729-00fe0aacd32c?auto=format&fit=crop&q=80&w=400&h=300" alt="Red Velvet" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="p-6">
+                        <h4 class="font-heading text-xl font-bold text-gray-900 mb-2 group-hover:text-brand-600 transition-colors">Red Velvet</h4>
+                        <p class="text-gray-500 text-sm mb-4 line-clamp-2">O clássico veludo vermelho com nosso exclusivo e suave recheio de cream cheese.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-2xl font-black text-gray-900">R$ 110<span class="text-sm font-medium text-gray-500">,00 /kg</span></span>
+                        </div>
+                        <a href="https://wa.me/5515996340103?text=Olá, gostaria de encomendar o bolo Red Velvet." class="mt-4 block w-full text-center bg-brand-50 hover:bg-brand-600 text-brand-600 hover:text-white py-3 rounded-xl font-semibold transition-colors">
+                            Pedir Agora
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="group bg-gray-50 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-gray-100 reveal reveal-delay-3">
+                    <div class="relative h-60 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1574085733277-851d9d856a3a?auto=format&fit=crop&q=80&w=400&h=300" alt="Brigadeiro Festa" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="p-6">
+                        <h4 class="font-heading text-xl font-bold text-gray-900 mb-2 group-hover:text-brand-600 transition-colors">Brigadeiro Festa</h4>
+                        <p class="text-gray-500 text-sm mb-4 line-clamp-2">Massa de chocolate super molhadinha, recheada com brigadeiro gourmet cremoso.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-2xl font-black text-gray-900">R$ 110<span class="text-sm font-medium text-gray-500">,00 /kg</span></span>
+                        </div>
+                        <a href="https://wa.me/5515996340103?text=Olá, gostaria de encomendar o bolo Brigadeiro Festa." class="mt-4 block w-full text-center bg-brand-50 hover:bg-brand-600 text-brand-600 hover:text-white py-3 rounded-xl font-semibold transition-colors">
+                            Pedir Agora
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="group bg-gray-50 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-gray-100 reveal reveal-delay-1">
+                    <div class="relative h-60 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&q=80&w=400&h=300" alt="Sensação" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="p-6">
+                        <h4 class="font-heading text-xl font-bold text-gray-900 mb-2 group-hover:text-brand-600 transition-colors">Sensação</h4>
+                        <p class="text-gray-500 text-sm mb-4 line-clamp-2">A combinação perfeita de chocolate meio amargo com mousse de morangos frescos.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-2xl font-black text-gray-900">R$ 110<span class="text-sm font-medium text-gray-500">,00 /kg</span></span>
+                        </div>
+                        <a href="https://wa.me/5515996340103?text=Olá, gostaria de encomendar o bolo Sensação." class="mt-4 block w-full text-center bg-brand-50 hover:bg-brand-600 text-brand-600 hover:text-white py-3 rounded-xl font-semibold transition-colors">
+                            Pedir Agora
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="mt-16 text-center reveal">
+                <a href="https://wa.me/5515996340103" class="inline-flex items-center gap-3 text-gray-600 hover:text-brand-600 font-medium transition-colors border-b-2 border-transparent hover:border-brand-600 pb-1">
+                    Ver cardápio completo no WhatsApp <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nossa Loja Section -->
+    <section id="loja" class="py-24 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-[2.5rem] shadow-xl overflow-hidden flex flex-col lg:flex-row reveal border border-gray-100">
+                
+                <!-- Text Content -->
+                <div class="w-full lg:w-5/12 p-10 md:p-14 flex flex-col justify-center">
+                    <h2 class="text-brand-600 font-bold uppercase tracking-wider text-sm mb-2">Venha nos Visitar</h2>
+                    <h3 class="font-heading text-3xl md:text-4xl font-bold text-gray-900 mb-6">Nossa Loja Física</h3>
+                    <p class="text-gray-600 mb-8 leading-relaxed">
+                        Um ambiente preparado com carinho para receber você. Retire sua encomenda ou venha provar nossos doces a pronta entrega.
+                    </p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-4">
+                            <div class="bg-brand-50 p-3 rounded-full text-brand-600 mt-1">
+                                <i class="fa-solid fa-location-dot text-xl w-5 text-center"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-900">Endereço</h4>
+                                <p class="text-gray-600 mt-1">Rua Salvador Corrêa, 659<br>Jardim Vergueiro, Sorocaba - SP<br>CEP: 18030-130</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div class="bg-yellow-50 p-3 rounded-full text-yellow-500 mt-1">
+                                <i class="fa-solid fa-star text-xl w-5 text-center"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-900">Super bem avaliada</h4>
+                                <p class="text-gray-600 mt-1">Confira nossas 5 estrelas no Google Maps!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Google Maps Iframe -->
+                <div class="w-full lg:w-7/12 min-h-[400px]">
+                    <iframe 
+                        src="https://maps.google.com/maps?q=Rua%20Salvador%20Corr%C3%AAa,%20659%20-%20Jardim%20Vergueiro,%20Sorocaba%20-%20SP,%2018030-130&t=&z=16&ie=UTF8&iwloc=&output=embed" 
+                        width="100%" 
+                        height="100%" 
+                        style="border:0; min-height: 400px;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="bg-gray-900 text-white pt-20 pb-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 border-b border-gray-800 pb-16 reveal">
+                
+                <!-- Brand Info -->
+                <div class="space-y-6">
+                    <div class="flex items-center">
+                        <i class="fa-solid fa-cake-candles text-brand-500 text-3xl mr-3"></i>
+                        <span class="font-heading font-bold text-2xl tracking-tight">Doce <span class="text-brand-500">Veneno</span></span>
+                    </div>
+                    <p class="text-gray-400 max-w-sm">
+                        Desde 1994 adoçando a vida dos nossos clientes com bolos e doces feitos com muito amor e tradição em Sorocaba.
+                    </p>
+                </div>
+
+                <!-- Contatos -->
+                <div class="space-y-6">
+                    <h4 class="font-heading text-xl font-bold">Fale Conosco</h4>
+                    <ul class="space-y-4">
+                        <li>
+                            <a href="https://wa.me/5515996340103" class="flex items-center text-gray-400 hover:text-brand-400 transition-colors">
+                                <i class="fa-brands fa-whatsapp text-green-500 text-xl w-8"></i>
+                                (15) 99634-0103
+                            </a>
+                        </li>
+                        <li>
+                            <a href="tel:1532341211" class="flex items-center text-gray-400 hover:text-brand-400 transition-colors">
+                                <i class="fa-solid fa-phone text-xl w-8"></i>
+                                (15) 3234-1211
+                            </a>
+                        </li>
+                        <li>
+                            <div class="flex items-center text-gray-400">
+                                <i class="fa-solid fa-envelope text-xl w-8"></i>
+                                contato@docevenenodoceria.com.br
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Delivery -->
+                <div class="space-y-6">
+                    <h4 class="font-heading text-xl font-bold">Delivery</h4>
+                    <p class="text-gray-400">Peça também pelo iFood e receba no conforto da sua casa.</p>
+                    <a href="#" class="inline-flex items-center justify-center bg-[#EA1D2C] hover:bg-[#c91825] text-white px-6 py-3 rounded-xl font-bold transition-all w-full sm:w-auto mt-2 shadow-lg">
+                        <i class="fa-solid fa-motorcycle mr-2"></i>
+                        Pedir no iFood
+                    </a>
+                </div>
+            </div>
+
+            <div class="pt-8 flex flex-col md:flex-row justify-between items-center text-gray-500 text-sm">
+                <p>&copy; 2026 Doce Veneno Doceria. Todos os direitos reservados.</p>
+                <p class="mt-2 md:mt-0">CNPJ: 51.147.651/0001-40</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/5515996340103" target="_blank" class="fixed bottom-6 right-6 bg-green-500 text-white w-16 h-16 rounded-full flex items-center justify-center text-3xl shadow-[0_10px_25px_rgba(34,197,94,0.5)] hover:scale-110 transition-transform duration-300 z-50 animate-bounce">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- JavaScript for Interactions -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Mobile Menu Toggle
+            const btn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            const icon = btn.querySelector('i');
+
+            btn.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+                if(menu.classList.contains('hidden')) {
+                    icon.classList.remove('fa-xmark');
+                    icon.classList.add('fa-bars');
+                } else {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-xmark');
+                }
+            });
+
+            // Close mobile menu on click link
+            document.querySelectorAll('#mobile-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    menu.classList.add('hidden');
+                    icon.classList.remove('fa-xmark');
+                    icon.classList.add('fa-bars');
+                });
+            });
+
+            // Navbar Scrolled State
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 20) {
+                    navbar.classList.add('shadow-md');
+                } else {
+                    navbar.classList.remove('shadow-md');
+                }
+            });
+
+            // Intersection Observer for scroll animations (reveal effect)
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.15
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target); // Run once
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal').forEach((el) => {
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
